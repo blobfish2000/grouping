@@ -34,12 +34,18 @@ EXPERIMENT_ID_NOT_AVAILABLE = "EXPERIMENT_ID_NOT_AVAILABLE"
 LABELER_ID_COOKIE_KEY = 'labeler_id'
 
 
+@app.cli.command('dump_samples')
+@click.option('--database', help='database file to use, a *.db file', default=None)
+def dumpdb_samples_command(database):
+    """ Print the samples table """
+    dump_db(None, database, responses=False, samples=True)
+
 @app.cli.command('dumpdb')
 @click.option('--outfile', help="name for output file containing the responses database", type=click.Path())
 @click.option('--database', help='database file to use, a *.db file', default=None)
 def dumpdb_command(outfile, database):
     """ Print the database (can save to CSV) """
-    dump_db(outfile, database)
+    dump_db(outfile, database, responses=True, samples=False)
 
 
 @app.cli.command('remove_experiment')
@@ -64,7 +70,7 @@ def load_command(directory, database):
     success = load(directory)
 
     if success:
-        dump_db(False, database)
+        dump_db(False, database, responses=False, samples=True)
 
 
 @app.cli.command('initdb')
@@ -75,7 +81,7 @@ def initdb_command(database, force):
     success = init_db(database, force)
 
     if success:
-        dump_db(False, database)
+        dump_db(False, database, responses=True, samples=True)
 
 
 def connect_db(alternate_db_path=None):
@@ -156,7 +162,7 @@ def load(directory):
         else:
             sample_url = os.path.join(SAMPLES_URL_PREFIX, subdir, sample_name)
             try:
-                db.execute('INSERT INTO samples (url) VALUES (?) ', [sample_url])
+                db.execute('INSERT INTO samples (url, count) VALUES (?, 0)', [sample_url])
                 print(Fore.BLUE, end='')
                 print("Added", sample_url)
                 print(Fore.RESET, end='')
@@ -171,7 +177,7 @@ def load(directory):
     return True
 
 
-def dump_db(outfile_name, database):
+def dump_db(outfile_name, database, responses=True, samples=True):
     # for pretty terminal output
     init()
 
@@ -261,7 +267,10 @@ def dump_db(outfile_name, database):
         json_out = {'dataset': json_responses}
         json.dump(json_out, outfile, indent=2)
 
-    print_response_db()
+    if samples:
+        print_samples_db()
+    if responses:
+        print_response_db()
 
 
 def remove_experiment(experiment_id, database):
@@ -477,11 +486,15 @@ def manage_post():
             skipped_removals.append(sample_url)
 
     db.commit()
-    return json.dumps({'status': 'success',
-                       'additions': additions,
-                       'skipped_additions': skipped_additions,
-                       'removals': removals,
-                       'skipped_removals': skipped_removals})
+
+    result = {'status': 'success',
+              'additions': additions,
+              'skipped_additions': skipped_additions,
+              'removals': removals,
+              'skipped_removals': skipped_removals}
+
+
+    return json.dumps(result)
 
 
 @app.route('/manage', methods=['GET'])
