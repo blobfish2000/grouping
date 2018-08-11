@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3082cf8-9870-4835-a8a6-6698bff5ef43" name="Default Changelist" comment="" />
+    <list default="true" id="c3082cf8-9870-4835-a8a6-6698bff5ef43" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/madmom/madmom/custom_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/madmom/madmom/custom_processors.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,35 +22,49 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="1" />
+          <entry key="Python" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="1567" />
+          <entry key="Python" value="1620" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="RhythmicGroupingCNN" value="1" />
+          <entry key="py" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="RhythmicGroupingCNN" value="1567" />
           <entry key="dummy" value="1" />
+          <entry key="py" value="53" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/response_processing/make_dataset_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="330">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
+              <folding>
+                <element signature="e#22#33#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/madmom/madmom/custom_processors.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -62,6 +78,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN" />
+        <option value="$PROJECT_DIR$/response_processing/make_dataset_v2.py" />
+        <option value="$PROJECT_DIR$/madmom/madmom/custom_processors.py" />
       </list>
     </option>
   </component>
@@ -81,23 +99,6 @@
             <path>
               <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
               <item name="grouping" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
-              <item name="grouping" type="462c0819:PsiDirectoryNode" />
-              <item name="madmom" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
-              <item name="grouping" type="462c0819:PsiDirectoryNode" />
-              <item name="madmom" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
-              <item name="grouping" type="462c0819:PsiDirectoryNode" />
-              <item name="madmom" type="462c0819:PsiDirectoryNode" />
-              <item name="madmom" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
@@ -170,13 +171,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-17" width="1366" height="747" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24943988" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24943988" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3290938" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -198,6 +200,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/response_processing/make_dataset_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#22#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madmom/madmom/custom_processors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
         </state>
       </provider>
     </entry>
