@@ -21,14 +21,17 @@ def main():
 
     args = parser.parse_args()
 
-    trials = json.load(open(args.dumpfile, "r"))['dataset']
+    experiments = util.load_by_url(args.dumpfile)
+    responses_by_url = util.get_final_responses_list(experiments)
 
+    # trials = json.load(open(args.dumpfile, "r"))['dataset']
+
+    n_features = 314
+    n_frames = 800
     data = []
     labels = []
     sample_names = []
-    for trial in trials:
-        final_response = [r['timestamp'] for r in trial['data']['final_response']]
-        sample_url = trial['url']
+    for sample_url, final_responses in responses_by_url.items():
 
         o = urlparse(sample_url)
         sample_name = os.path.split(o.path)[-1]
@@ -38,22 +41,29 @@ def main():
 
         print(infile)
 
-        label_processor = LabelOutputProcessor(final_response, args.fps)
+        label_processor = LabelOutputProcessor(final_responses, args.fps)
 
         # create an IOProcessor
         processor = IOProcessor(preprocessor, label_processor)
         sample_data, sample_labels = _process((processor, infile, None, vars(args)))
-        data.append(sample_data)
 
-        if sample_data.shape != data[0].shape:
-            print("Shapes do not match, ", data[0].shape, sample_data.shape, "Skipping.")
-            data.pop()
+        if sample_data.shape[0] < n_frames or sample_data.shape[1] != n_features:
+            print("SKIPPING: Shapes is {} but it must be (>={}, {}), ".format(sample_data.shape, n_frames, n_features))
             continue
 
-        labels.append(sample_labels)
+        data.append(sample_data[:n_frames])
+        labels.append(sample_labels[:n_frames])
         sample_names.append(sample_name)
 
+    print("DATASET:")
+    print('{} clips'.format(len(data)))
+    print('{} frames of audio at {} fps'.format(n_frames, args.fps))
+    print('{} features per frame'.format(n_features))
+    print("saving {} ...".format(args.outfile))
+
     np.savez(args.outfile, x=data, labels=labels, sample_names=sample_names)
+
+    print("done.")
 
 
 if __name__ == '__main__':
