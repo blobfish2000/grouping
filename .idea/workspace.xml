@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3082cf8-9870-4835-a8a6-6698bff5ef43" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/madmom/madmom/custom_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/madmom/madmom/custom_processors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/madmom/bin/RhythmicGroupingSimpleRNN" beforeDir="false" afterPath="$PROJECT_DIR$/madmom/bin/RhythmicGroupingSimpleRNN" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/response_processing/make_dataset_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/response_processing/make_dataset_v2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,37 +24,48 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="3" />
+          <entry key="Python" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="1620" />
+          <entry key="Python" value="3189" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="RhythmicGroupingCNN" value="1" />
-          <entry key="py" value="2" />
+          <entry key="RhythmicGroupingCNN" value="2" />
+          <entry key="RhythmicGroupingSimpleRNN" value="1" />
+          <entry key="py" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="RhythmicGroupingCNN" value="1567" />
+          <entry key="RhythmicGroupingCNN" value="2450" />
+          <entry key="RhythmicGroupingSimpleRNN" value="86" />
           <entry key="dummy" value="1" />
-          <entry key="py" value="53" />
+          <entry key="py" value="653" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/response_processing/make_dataset_v2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="117">
+              <caret line="54" column="32" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
               <folding>
                 <element signature="e#22#33#0" expanded="true" />
               </folding>
@@ -60,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/madmom/madmom/custom_processors.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingSimpleRNN">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+            <state relative-caret-position="165">
+              <caret line="17" column="73" selection-start-line="17" selection-start-column="73" selection-end-line="17" selection-end-column="73" />
             </state>
           </provider>
         </entry>
@@ -77,9 +90,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN" />
-        <option value="$PROJECT_DIR$/response_processing/make_dataset_v2.py" />
         <option value="$PROJECT_DIR$/madmom/madmom/custom_processors.py" />
+        <option value="$PROJECT_DIR$/response_processing/make_dataset_v2.py" />
+        <option value="$PROJECT_DIR$/madmom/bin/RhythmicGroupingSimpleRNN" />
+        <option value="$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN" />
       </list>
     </option>
   </component>
@@ -103,7 +117,13 @@
             <path>
               <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
               <item name="grouping" type="462c0819:PsiDirectoryNode" />
-              <item name="response_processing" type="462c0819:PsiDirectoryNode" />
+              <item name="madmom" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="grouping" type="b2602c69:ProjectViewProjectNode" />
+              <item name="grouping" type="462c0819:PsiDirectoryNode" />
+              <item name="madmom" type="462c0819:PsiDirectoryNode" />
+              <item name="bin" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -147,7 +167,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/response_processing/make_dataset_v2.py" />
-      <option name="PARAMETERS" value="response_processing/dump.json madmom/samples madmom/models/dataset.npz" />
+      <option name="PARAMETERS" value="response_processing/dump.json madmom/samples madmom/data/dataset.npz" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -196,27 +216,55 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN">
+    <entry file="file://$PROJECT_DIR$/madmom/madmom/custom_processors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="105">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/tensorflow/python/layers/convolutional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="365" column="4" selection-start-line="365" selection-start-column="4" selection-end-line="365" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="543" selection-start-line="543" selection-end-line="543" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/numpy/lib/npyio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="692" selection-start-line="692" selection-end-line="692" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingSimpleRNN">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="17" column="73" selection-start-line="17" selection-start-column="73" selection-end-line="17" selection-end-column="73" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/response_processing/make_dataset_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="117">
+          <caret line="54" column="32" selection-start-line="54" selection-start-column="32" selection-end-line="54" selection-end-column="32" />
           <folding>
             <element signature="e#22#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/madmom/madmom/custom_processors.py">
+    <entry file="file://$PROJECT_DIR$/madmom/bin/RhythmicGroupingCNN">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+        <state relative-caret-position="240">
+          <caret line="38" column="30" selection-start-line="38" selection-start-column="30" selection-end-line="38" selection-end-column="30" />
         </state>
       </provider>
     </entry>
