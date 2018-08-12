@@ -51,6 +51,7 @@ def main():
             print("SKIPPING: Shapes is {} but it must be (>={}, {}), ".format(sample_data.shape, n_frames, n_features))
             continue
 
+        sample_data = np.expand_dims(sample_data, axis=2)
         data.append(sample_data[:n_frames])
         labels.append(sample_labels[:n_frames])
         sample_names.append(sample_name)
@@ -61,6 +62,8 @@ def main():
     print('{} features per frame'.format(n_features))
     print("saving {} ...".format(args.outfile))
 
+    data = np.array(data)
+    labels = np.array(labels)
     np.savez(args.outfile, x=data, labels=labels, sample_names=sample_names)
 
     print("done.")
