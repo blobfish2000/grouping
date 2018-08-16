@@ -219,7 +219,7 @@ def dump_db(outfile_name, database, responses=True, samples=True):
         json_responses = []
 
         headers = OrderedDict()
-        headers['id'] = 3
+        headers['id'] = 4
         headers['url'] = 25
         headers['stamp'] = 19
         headers['labeler_id'] = 36
