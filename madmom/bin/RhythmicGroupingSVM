@@ -8,6 +8,7 @@ from datetime import datetime
 import numpy as np
 import sys
 from sklearn import svm
+from sklearn.metrics import average_precision_score
 
 
 def main():
@@ -27,6 +28,7 @@ def main():
     test_subparser = subparsers.add_parser("test")
     test_subparser.add_argument("test_set", help="npz file with test set")
     test_subparser.add_argument("model_file", help="the pickle file of the saved model")
+    test_subparser.add_argument("--plot", "-p", action="store_true", help="show plots of labels versus output")
     test_subparser.add_argument("--n-frames", "-f", type=int, help="number of audio frames", default=1)
     test_subparser.set_defaults(func=test)
 
@@ -52,21 +54,21 @@ def train(args):
     x = train_set["x"]
     labels = train_set["labels"]
     samples_flat = []
-    bit_labels = []
-    for sample, sample_labels in zip(x, labels):
+    ys = []
+    for sample, sample_labels in zip(x[:100], labels):
         # chop up each samples into short segments
         for idx in range(0, len(sample) - args.n_frames, 10):
             subsample = sample[idx:idx + args.n_frames]
             subsample_label = sample_labels[idx + args.n_frames - 1]
             subsample_flat = subsample.flatten()
             samples_flat.append(subsample_flat)
-            # the label for each bit is the label for the last frame in the bit
-            bit_labels.append(int(np.ceil(subsample_label)))
+            # the label for each x is the label for the last frame in the x
+            ys.append(int(np.ceil(subsample_label)))
 
     model = svm.SVC(C=args.penalty, kernel=args.kernel, degree=args.degree, verbose=True)
 
-    samples_flat = np.array(samples_flat, dtype=np.int)
-    model.fit(samples_flat, bit_labels)
+    samples_flat = np.array(samples_flat, dtype=np.float32)
+    model.fit(samples_flat, ys)
 
     if not os.path.isdir(args.model_directory):
         os.makedirs(args.model_directory)
@@ -76,32 +78,54 @@ def train(args):
     model_full_filename = os.path.join(args.model_directory, model_name)
     pickle.dump(model, open(model_full_filename, 'wb'))
 
-    # plot(y_hat, fixed_length_labels, sample_names[0], sample_idx=0)
-
 
 def test(args):
     test_set = np.load(args.test_set)
-    x = test_set["x"]
-    labels = test_set["labels"]
-    sample_names = test_set["sample_names"]
+    start = 10
+    N = 2
+    x = test_set["x"][start:start+N]
+    labels = test_set["labels"][start:start+N]
+    sample_names = test_set["sample_names"][start:start+N]
 
-    bits = []
-    bit_labels = []
-    for sample, sample_labels in zip(x, labels):
-        # chop up each samples into short segments
-        for idx in range(0, len(sample) - args.n_frames, 1):
-            bit = sample[idx:idx + args.n_frames]
-            bits.append(bit.flatten())
-            # the label for each bit is the label for the last frame in the bit
-            bit_labels.append(int(np.ceil(sample_labels[idx + args.n_frames])))
-
-    bits = np.array(bits, dtype=np.int)
     model = pickle.load(open(args.model_file, 'rb'))
     print("unpickling done")
-    y = model.predict(bits)
-    print(y)
 
-    # plot(y_hat, fixed_length_labels, sample_names[0], sample_idx=0)
+    xs = []
+    ys = []
+    y_hats = []
+    for sample, sample_labels in zip(x, labels):
+        xs_per_sample = []
+        ys_per_sample = []
+        # chop up each samples into short segments
+        for idx in range(0, len(sample) - args.n_frames, 1):
+            x = sample[idx:idx + args.n_frames]
+            xs_per_sample.append(x.flatten())
+            # the label for each x is the label for the last frame in the x
+            ys_per_sample.append(int(np.ceil(sample_labels[idx + args.n_frames])))
+        xs.append(xs_per_sample)
+        ys.append(ys_per_sample)
+        y_hats.append(model.predict(xs_per_sample))
+
+    xs = np.array(xs)
+    ys = np.array(ys)
+    y_hats = np.array(y_hats)
+
+    if args.plot:
+        import matplotlib.pyplot as plt
+        for xs_per_sample, ys_per_sample, y_hats_per_sample, name in zip(xs, ys, y_hats, sample_names):
+            img = xs_per_sample.T
+
+            fig, ax1 = plt.subplots()
+            fig.suptitle(name)
+            ax1.imshow(img)
+
+            ax2 = ax1.twinx()
+            ax2.plot(ys_per_sample, label='y')
+            ax2.plot(y_hats_per_sample, label='y_hat')
+
+            fig.tight_layout()
+        plt.legend()
+        plt.show()
 
 
 if __name__ == "__main__":
