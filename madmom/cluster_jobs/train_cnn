@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -t 12:00:00
+#SBATCH -t 4:00:00
 #SBATCH --mem 64GB
-#SBATCH -J train_svm
+#SBATCH -J train_cnn
 
 # Stop execution after any error
 set -e
@@ -16,7 +16,7 @@ PROJDIR=$PWD
 
 # or another folder where you want your data to be stored
 # Job-related variables
-THISJOB=train_svm
+THISJOB=train_cnn
 
 # some way to identify this job execution
 WORKDIR=$LOCALDIR/$MYUSER/$THISJOB
@@ -31,7 +31,7 @@ cp -r $PROJDIR/data .
 
 # Execute program (this also writes files in work dir)
 source ~/Projects/grouping/venv/bin/activate
-./bin/RhythmicGroupingSVM train data/dataset.npz models
+./bin/RhythmicGroupingCNN train data/final_study_dataset/dataset/dataset.npz models
 
 # Transfer generated files into home directory
 cp -r models/* $DATADIR/models

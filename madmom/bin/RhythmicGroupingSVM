@@ -17,6 +17,7 @@ def main():
     train_subparser = subparsers.add_parser("train")
     train_subparser.add_argument("train_set", help="npz file with training set")
     train_subparser.add_argument("model_directory", help="directory to save the model in. it will be named with a date")
+    train_subparser.add_argument("--n-frames", "-f", type=int, help="number of audio frames", default=1)
     train_subparser.add_argument("--penalty", "-c", help="Penalty parameter C of the error term.", default=1)
     train_subparser.add_argument("--kernel", "-k", help="one of [linear, polynomial rbg, sigmoid]", default='linear')
     train_subparser.add_argument("--degree", "-d", type=float, help="degree [only with polynomial]", default=1)
@@ -26,6 +27,7 @@ def main():
     test_subparser = subparsers.add_parser("test")
     test_subparser.add_argument("test_set", help="npz file with test set")
     test_subparser.add_argument("model_file", help="the pickle file of the saved model")
+    test_subparser.add_argument("--n-frames", "-f", type=int, help="number of audio frames", default=1)
     test_subparser.set_defaults(func=test)
 
     model_only_subparser = subparsers.add_parser("model_only")
@@ -49,15 +51,13 @@ def train(args):
     train_set = np.load(args.train_set)
     x = train_set["x"]
     labels = train_set["labels"]
-    n_frames = 500
-
     samples_flat = []
     bit_labels = []
     for sample, sample_labels in zip(x, labels):
         # chop up each samples into short segments
-        for idx in range(0, len(sample) - n_frames, 10):
-            subsample = sample[idx:idx + n_frames]
-            subsample_label = sample_labels[idx + n_frames - 1]
+        for idx in range(0, len(sample) - args.n_frames, 10):
+            subsample = sample[idx:idx + args.n_frames]
+            subsample_label = sample_labels[idx + args.n_frames - 1]
             subsample_flat = subsample.flatten()
             samples_flat.append(subsample_flat)
             # the label for each bit is the label for the last frame in the bit
@@ -80,8 +80,6 @@ def train(args):
 
 
 def test(args):
-    n_frames = 200
-
     test_set = np.load(args.test_set)
     x = test_set["x"]
     labels = test_set["labels"]
@@ -91,11 +89,11 @@ def test(args):
     bit_labels = []
     for sample, sample_labels in zip(x, labels):
         # chop up each samples into short segments
-        for idx in range(0, len(sample) - n_frames, 1):
-            bit = sample[idx:idx + n_frames]
+        for idx in range(0, len(sample) - args.n_frames, 1):
+            bit = sample[idx:idx + args.n_frames]
             bits.append(bit.flatten())
             # the label for each bit is the label for the last frame in the bit
-            bit_labels.append(int(np.ceil(sample_labels[idx + n_frames])))
+            bit_labels.append(int(np.ceil(sample_labels[idx + args.n_frames])))
 
     bits = np.array(bits, dtype=np.int)
     model = pickle.load(open(args.model_file, 'rb'))
