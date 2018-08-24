@@ -31,7 +31,7 @@ cp -r $PROJDIR/data .
 
 # Execute program (this also writes files in work dir)
 source ~/Projects/grouping/venv/bin/activate
-./bin/RhythmicGroupingSVM train data/dataset.npz models
+./bin/RhythmicGroupingSVM train -f 5 data/train.npz models
 
 # Transfer generated files into home directory
 cp -r models/* $DATADIR/models

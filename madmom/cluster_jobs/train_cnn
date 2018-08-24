@@ -11,7 +11,7 @@ set -e
 # Useful variables
 MYUSER=$(whoami)
 LOCALDIR=/tmp
-DATADIR=~/data/grouping
+DATADIR=~/data/grouping/cnn
 PROJDIR=$PWD
 
 # or another folder where you want your data to be stored
@@ -31,11 +31,11 @@ cp -r $PROJDIR/data .
 
 # Execute program (this also writes files in work dir)
 source ~/Projects/grouping/venv/bin/activate
-./bin/RhythmicGroupingCNN train data/final_study_dataset/dataset/dataset.npz models
+./bin/RhythmicGroupingCNN train data/train.npz --log --epocs 500 -f 100
 
 # Transfer generated files into home directory
-cp -r models/* $DATADIR/models
+cp -r log_data/* $DATADIR/
 
 # Cleanup
-rm -r $WORKDIR
+#rm -r $WORKDIR
 
