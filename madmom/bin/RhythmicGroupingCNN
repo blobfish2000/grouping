@@ -106,7 +106,7 @@ def model_only(args):
 
 def train(args):
     summary_frequency = 5
-    batch_size = 8192
+    batch_size = 2048
 
     # X: 408 samples x 800 time steps (audio frames) x 314 features
     sess, x, labels, sample_names = common(args)
