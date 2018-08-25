@@ -21,10 +21,11 @@ class CNN:
         self.y = tf.placeholder(tf.float32, shape=(None, n_time_steps), name="labels")
         tf.summary.histogram("y", self.y)
 
-        self.conv1 = tf.layers.conv2d(self.x, filters=conv1_channels, kernel_size=[5, 5], padding="same", activation=tf.nn.relu,
+        self.conv1 = tf.layers.conv2d(self.x, filters=conv1_channels, kernel_size=[5, 5], padding="same",
+                                      activation=tf.nn.relu,
                                       name='conv1')
-        print(self.conv1.get_shape())
-        tf.summary.image("conv1", tf.reshape(tf.transpose(self.conv1, (0, 3, 2, 1)), [conv1_channels, 5, 5, 1]))
+        self.conv1_kernel = tf.get_default_graph().get_tensor_by_name('conv1/kernel:0')
+        tf.summary.image("conv1 kernel", tf.transpose(self.conv1_kernel, (0, 3, 2, 1)))
         self.pool1 = tf.layers.max_pooling2d(self.conv1, pool_size=[2, 2], strides=2)
 
         self.conv2 = tf.layers.conv2d(self.pool1, filters=conv2_channels, kernel_size=[5, 5], padding="same",
@@ -34,13 +35,13 @@ class CNN:
         w = self.pool2.get_shape()[1]
         h = self.pool2.get_shape()[2]
         self.pool2_flat = tf.reshape(self.pool2, [-1, w * h * conv2_channels])
-        self.dense = tf.layers.dense(self.pool2_flat, units=1024, activation=tf.nn.relu, name='dense1')
-        self.logits = tf.layers.dense(self.dense, units=n_time_steps, name='dense2')
+        self.dense1 = tf.layers.dense(self.pool2_flat, units=1024, activation=tf.nn.relu, name='dense1')
+        self.dense2 = tf.layers.dense(self.dense1, units=256, activation=tf.nn.relu, name='dense2')
+        self.y_hat = tf.layers.dense(self.dense1, units=1, activation=tf.nn.sigmoid, name='dense3')
 
-        self.binary_y_hat = tf.argmax(self.logits, axis=1, name='binary_y_hat_op')
-        self.y_hat = tf.nn.softmax(self.logits, name="softmax")
+        self.binary_y_hat = tf.argmax(self.y_hat, axis=1, name='binary_y_hat')
 
-        self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y, logits=self.logits))
+        self.loss = tf.reduce_mean(self.y_hat, name='mean loss')
 
         tf.summary.scalar("loss", self.loss)
 
@@ -52,11 +53,12 @@ class CNN:
             tf.summary.histogram(var.name + "/gradient", grad)
 
         self.global_step = tf.Variable(0, trainable=False, name="global_step")
-        self.optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
+        self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
         self.opt = self.optimizer.minimize(loss=self.loss, global_step=self.global_step)
 
 
 def main():
+    DEFAULT_TIME_STEPS = 5
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
@@ -65,17 +67,19 @@ def main():
     train_subparser.add_argument("--log", "-l", action="store_true", help="dataset (npz file)")
     train_subparser.add_argument("--epocs", "-e", type=int, help="number of epocs to train for", default=100)
     train_subparser.add_argument("--summary-frequency", "-f", type=int, help="print every  this many cycles", default=5)
-    train_subparser.add_argument("--time-steps", "-t", type=int, help="number of audio sample time steps to feed in", default=5)
+    train_subparser.add_argument("--time-steps", "-t", type=int, help="number of audio sample time steps to feed in",
+                                 default=DEFAULT_TIME_STEPS)
     train_subparser.set_defaults(func=train)
 
     test_subparser = subparsers.add_parser("test")
     test_subparser.add_argument("dataset", help="dataset (npz file)")
     test_subparser.add_argument("checkpoint", help="checkpoint of saved weights (ckpt file)")
-    test_subparser.add_argument("--time-steps", "-t", type=int, help="number of audio sample time steps to feed in", default=1)
+    test_subparser.add_argument("--time-steps", "-t", type=int, help="number of audio sample time steps to feed in",
+                                default=DEFAULT_TIME_STEPS)
     test_subparser.set_defaults(func=test)
 
     model_only_subparser = subparsers.add_parser("model_only")
-    model_only_subparser.add_argument("--time_steps", type=int, help="number of time steps")
+    model_only_subparser.add_argument("--time_steps", "-t", type=int, help="number of time steps")
     model_only_subparser.add_argument("--num_samples", type=int, help="number of audio samples to use (1-15 right now")
     model_only_subparser.set_defaults(func=model_only)
 
@@ -105,7 +109,6 @@ def model_only(args):
 
 
 def train(args):
-    summary_frequency = 5
     batch_size = 2048
 
     # X: 408 samples x 800 time steps (audio frames) x 314 features
@@ -134,17 +137,17 @@ def train(args):
         print("Training for {} epocs".format(args.epocs))
         inputs_per_sample = x.shape[1] - args.time_steps
         fixed_length_x = np.ndarray((inputs_per_sample * x.shape[0], args.time_steps, x.shape[2], 1))
+        fixed_length_labels = np.ndarray((inputs_per_sample * x.shape[0], args.time_steps))
         for j in range(args.epocs):
-            fixed_length_labels = np.ndarray((inputs_per_sample * x.shape[0], args.time_steps))
             for i, t0 in enumerate(range(0, inputs_per_sample)):
-              s0 = i * x.shape[0]
-              s1 = s0 + x.shape[0]
-              t1 = t0 + args.time_steps
-              fixed_length_x[s0:s1] = x[:, t0:t1, :]
-              fixed_length_labels[s0:s1] = labels[:, t0:t1]
+                s0 = i * x.shape[0]
+                s1 = s0 + x.shape[0]
+                t1 = t0 + args.time_steps
+                fixed_length_x[s0:s1] = x[:, t0:t1, :]
+                fixed_length_labels[s0:s1] = labels[:, t0:t1]
             batch_0 = np.random.randint(0, fixed_length_x.shape[0] - batch_size)
-            batch_x = fixed_length_x[:batch_size]
-            batch_y = fixed_length_labels[:batch_size]
+            batch_x = fixed_length_x[batch_0:batch_0+batch_size]
+            batch_y = fixed_length_labels[batch_0:batch_0+batch_size]
             feed_dict = {m.x: batch_x, m.y: batch_y}
             ops = [m.global_step, summaries, m.loss, m.y_hat, m.opt]
             step, s, loss, y_hat, _ = sess.run(ops, feed_dict=feed_dict)
@@ -154,7 +157,6 @@ def train(args):
                     writer.add_summary(s, step)
 
                 print(j, loss)
-                # plot(y_hat, fixed_length_labels, sample_names[0], sample_idx=np.random.randint(0, batch_size))
 
             if args.log:
                 os.environ['TF_LOG_DIR'] = log_dir
@@ -165,40 +167,38 @@ def train(args):
 
 
 def test(args):
-    num_samples = 15
+    import matplotlib.pyplot as plt
+
+    num_samples_to_plot = 2
 
     sess, x_test, labels_test, sample_names = common(args)
 
     m = CNN(args.time_steps)
 
-    summaries = tf.summary.merge_all()
-
     saver = tf.train.Saver()
     saver.restore(sess, args.checkpoint)
 
-    fixed_length_x = x_test[:num_samples, 0:args.time_steps, :]
-    fixed_length_labels = labels_test[:num_samples, 0:args.time_steps]
-    y_hat, loss_per_sample = sess.run([m.y_hat, m.loss], feed_dict={m.x: fixed_length_x, m.y: fixed_length_labels})
+    for sample_idx in range(num_samples_to_plot):
+        # for each sample, step over each args.time_steps chunk and compute y_hat
+        inputs_per_sample = x_test.shape[1] - args.time_steps
+        sample_x = np.ndarray((inputs_per_sample, args.time_steps, x_test.shape[2], 1))
+        sample_labels = np.ndarray((inputs_per_sample, args.time_steps))
+        for i, t0 in enumerate(range(0, inputs_per_sample)):
+            t1 = t0 + args.time_steps
+            sample_x[i] = x_test[sample_idx, t0:t1, :]
+            sample_labels[i] = labels_test[sample_idx, t0:t1]
 
-    import matplotlib.pyplot as plt
-    for test_idx in range(num_samples):
-        print("Test Loss", loss_per_sample[test_idx])
+        y_hat, loss = sess.run([m.y_hat, m.loss], feed_dict={m.x: sample_x, m.y: sample_labels})
+
+        print("Test Loss", loss)
         plt.figure()
-        plt.plot(y_hat[test_idx, :, 0, 0], label="y_hat")
-        plt.plot(fixed_length_labels[test_idx], label="labels")
+        plt.plot(y_hat, label="y_hat")
+        plt.plot(sample_labels, label="labels")
         plt.ylabel("% likelihood of start of group")
         plt.xlabel("time")
-        plt.title("Test on sample {} ({})".format(test_idx, sample_names[test_idx]))
+        plt.legend()
+        plt.title("Test on sample {} ({})".format(sample_idx, sample_names[sample_idx]))
 
-    plt.show()
-
-
-def plot(y_hat, fixed_length_labels, sample_name, sample_idx):
-    plt.plot(y_hat[sample_idx], label="y_hat")
-    plt.plot(fixed_length_labels[sample_idx], label="labels")
-    plt.ylabel("% likelihood of start of group")
-    plt.xlabel("time")
-    plt.title("Test on sample " + sample_name)
     plt.show()
 
 
