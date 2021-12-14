@@ -1,7 +1,7 @@
 -- Create table for samples
 drop table if exists samples;
 create table samples (
-  url text not null primary key,
+  url text not null primary key
 );
 
 -- Create table for labelers
