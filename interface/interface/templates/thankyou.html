@@ -11,14 +11,37 @@
 </head>
 <body>
 
+
 <div class="container">
   <div class="jumbotron">
     <br>
     <br>
     <br>
-    <h2>Thank you so much! You've labeled all the available samples.</h2>
+    <h2>Thank you so much! You've labeled all the available samples. Copy your unique token and enter it into the survey when you return.</h2>
+    <p id="token"></p>
     <br>
   </div>
 </div>
 </body>
+<script>
+
+  function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                          c = c.substring(1);
+                        }
+                if (c.indexOf(name) == 0) {
+                          return c.substring(name.length, c.length);
+                        }
+              }
+        return "";
+    }
+
+  var token = getCookie("labeler_id");
+  document.getElementById("token").innerHTML = "Your unique token is: " + token;
+</script>
 </html>

@@ -24,8 +24,8 @@ app.config.update(dict(
 ))
 
 DEFAULT_SAMPLES_PER_PARTICIPANT = 500
-SAMPLES_URL_PREFIX = 'https://mprlab.wpi.edu/'
-SAMPLES_ROOT = '/var/www/html/grouping'
+SAMPLES_URL_PREFIX = 'http://147.182.213.96:8000/'
+SAMPLES_ROOT = ''
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))  # refers to application_top
 APP_STATIC = os.path.join(APP_ROOT, 'static')
 NO_LABELER_ID = "NO_LABELER_ID"
