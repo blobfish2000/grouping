@@ -24,7 +24,7 @@ app.config.update(dict(
 ))
 
 DEFAULT_SAMPLES_PER_PARTICIPANT = 500
-SAMPLES_URL_PREFIX = 'http://147.182.213.96:8000/'
+SAMPLES_URL_PREFIX = 'http://localhost:8888/samples/'
 SAMPLES_ROOT = ''
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))  # refers to application_top
 APP_STATIC = os.path.join(APP_ROOT, 'static')
